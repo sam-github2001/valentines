@@ -55,7 +55,7 @@ body{
   display: grid;
   place-items: center;
   padding: 22px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Card baseline */
@@ -160,7 +160,7 @@ body{
   place-items: center;
   padding: 8px 0 0;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .envelope{
