@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>For Keira v17</title>
+  <title>For Keira v18</title>
 
   <!-- Cute friendly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -431,8 +431,11 @@
 
     function setButtonScales(){
 
-        const yesScale = Math.min(1 + noCount * 0.10, 1.6);
-        const noScale  = Math.max(1 - noCount * 0.10, 0.55);
+        /* YES grows until 7 No clicks */
+        const cappedNo = Math.min(noCount, 7);
+
+        const yesScale = 1 + cappedNo * 0.18;   // stronger growth
+        const noScale  = Math.max(1 - cappedNo * 0.10, 0.50);
 
         yesBtn.style.transform =
             `translate(-50%, -50%) scale(${yesScale})`;
@@ -440,7 +443,7 @@
         noBtn.style.transform =
             `translate(-50%, -50%) scale(${noScale})`;
 
-        if (noCount >= 4) yesBtn.classList.add("juicy");
+        if (noCount >= 3) yesBtn.classList.add("juicy");
     }
 
     function rectsOverlap(a, b) {
