@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>For Keira v21</title>
+  <title>For Keira v22</title>
 
   <!-- Cute friendly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,11 @@
     <section id="gateCard" class="card hidden">
       <div class="header">
         <div class="badge"><span class="dot"></span><span id="gateStatus">SEALED</span></div>
-        <div id="gateTapHint" class="tapHint">Tap to open me</div>
+
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+          <div id="gateTapHint" class="tapHint">Tap to open me</div>
+          <div class="soundHint">Please turn sound on :)</div>
+        </div>
       </div>
 
       <div id="gate" class="gate">
