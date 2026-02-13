@@ -97,36 +97,49 @@ h3{ margin:0 0 10px; font-size: 18px; }
   font-size: 13px;
 }
 
-/* Gate */
+/* Gate (cute valentines card) */
 .gate{
   min-height: calc(100vh - 86px);
   display:grid;
   place-items:center;
-  padding: 10px 0;
+  padding: 18px 0;
 }
 
 .gate__card{
-  width: min(720px, 100%);
-  border-radius: var(--radiusXL);
-  padding: 26px;
+  width: min(780px, 100%);
+  border-radius: 44px;                 /* MUCH rounder */
+  padding: 34px 30px;
   background:
-    radial-gradient(650px 340px at 20% 10%, rgba(255,45,111,.22), transparent 58%),
-    radial-gradient(540px 320px at 85% 30%, rgba(255,106,165,.18), transparent 60%),
-    rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 0 30px 90px rgba(0,0,0,.52);
+    radial-gradient(520px 280px at 18% 15%, rgba(255, 90, 150, .40), transparent 60%),
+    radial-gradient(560px 320px at 85% 35%, rgba(255, 170, 210, .35), transparent 62%),
+    radial-gradient(720px 460px at 50% 120%, rgba(255, 60, 120, .18), transparent 60%),
+    rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow: 0 40px 110px rgba(0,0,0,.55);
   position: relative;
   overflow:hidden;
 }
 
+/* Soft “paper” overlay */
+.gate__card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+  pointer-events:none;
+}
+
+/* Floating hearts pattern (subtle) */
 .gate__card::before{
   content:"";
   position:absolute;
-  inset:-2px;
-  border-radius: var(--radiusXL);
-  background: linear-gradient(135deg, rgba(255,45,111,.35), rgba(255,179,207,.18), rgba(255,106,165,.28));
-  opacity:.35;
-  filter: blur(10px);
+  inset:-40px;
+  opacity:.20;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.45) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 30%, rgba(255,255,255,.45) 0 2px, transparent 3px),
+    radial-gradient(circle at 40% 70%, rgba(255,255,255,.45) 0 2px, transparent 3px);
+  filter: blur(0.2px);
   pointer-events:none;
 }
 
@@ -139,32 +152,35 @@ h3{ margin:0 0 10px; font-size: 18px; }
 }
 
 .gate__iconBtn{
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.08);
+  width: 64px;
+  height: 64px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.24);
+  background: rgba(255,255,255,.14);
   display:grid;
   place-items:center;
   cursor:pointer;
   transition: transform .15s ease, background .15s ease;
+  box-shadow: 0 18px 44px rgba(0,0,0,.28);
 }
-.gate__iconBtn:hover{ background: rgba(255,255,255,.10); }
+
+.gate__iconBtn:hover{ background: rgba(255,255,255,.18); }
 .gate__iconBtn:active{ transform: translateY(1px); }
 
 .gate__icon{
-  width: 26px;
-  height: 26px;
-  fill: rgba(255,255,255,.92);
-  filter: drop-shadow(0 10px 16px rgba(255,45,111,.18));
+  width: 28px;
+  height: 28px;
+  fill: rgba(255,255,255,.96);
+  filter: drop-shadow(0 12px 18px rgba(255,60,120,.25));
 }
 
 .gate__badge{
   font-size: 12px;
-  padding: 7px 10px;
+  padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
 }
 
 .gate__content{
@@ -174,59 +190,60 @@ h3{ margin:0 0 10px; font-size: 18px; }
 }
 
 .gate__title{
-  margin: 0 0 8px;
-  font-size: 44px;
+  margin: 4px 0 10px;
+  font-family: "Fredoka", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 52px;
+  letter-spacing: .2px;
+  line-height: 1.05;
 }
 
 .gate__subtitle{
   margin: 0 0 18px;
-  max-width: 46ch;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 16px;
+  color: rgba(255,255,255,.86);
+  max-width: 52ch;
 }
 
+/* Countdown card */
 .gate__countdownCard{
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.06);
-  padding: 16px 16px 14px;
-  width: min(420px, 100%);
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.14);
+  padding: 16px 18px 14px;
+  width: min(460px, 100%);
+  box-shadow: 0 18px 50px rgba(0,0,0,.22);
 }
 
 .gate__countdownLabel{
+  font-family: "Nunito", system-ui, sans-serif;
   font-size: 12px;
-  color: rgba(255,255,255,.75);
+  color: rgba(255,255,255,.82);
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: .12em;
 }
 
 .gate__countdownValue{
-  font-family: "Inter", ui-sans-serif;
-  font-size: 22px;
+  font-family: "Fredoka", system-ui, sans-serif;
+  font-size: 26px;
   font-weight: 600;
   letter-spacing: .06em;
+  color: rgba(255,255,255,.95);
 }
 
 .gate__countdownNote{
   margin-top: 6px;
+  font-family: "Nunito", system-ui, sans-serif;
   font-size: 12px;
-  color: rgba(255,255,255,.72);
+  color: rgba(255,255,255,.80);
 }
 
-.gate__fineprint{
-  margin-top: 14px;
-  font-size: 12px;
-  color: rgba(255,255,255,.68);
-}
-.gate__hint{
-  opacity: .55; /* keep it subtle */
-}
-.gate__hint kbd{
-  display:inline-block;
-  padding: 2px 7px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.06);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+/* Smaller screens */
+@media (max-width: 740px){
+  .gate__card{ padding: 26px 20px; border-radius: 36px; }
+  .gate__title{ font-size: 40px; }
 }
 
 /* Hero */
