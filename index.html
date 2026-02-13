@@ -707,6 +707,15 @@
     const finalBox = document.getElementById("final");
     const song = document.getElementById("song");
 
+    let noHoverDodgedOnce = false;
+
+    noBtn.addEventListener("mouseenter", () => {
+        // Only on the 4th No, and only once
+        if (noCount === 4 && !noHoverDodgedOnce) {
+            noHoverDodgedOnce = true;
+            moveNoButton();
+        }
+        });
     // =========================================================
     // RENDER CONTENT
     // =========================================================
@@ -850,50 +859,75 @@
     let noCount = 0;
 
     function setButtonScales(){
-        const yesScale = Math.min(1 + noCount * 0.12, 1.95);
-        const noScale  = Math.max(1 - noCount * 0.10, 0.50);
+        // Safe caps so it NEVER overlaps the question text
+        const yesScale = Math.min(1 + noCount * 0.10, 1.65);  // stop here
+        const noScale  = Math.max(1 - noCount * 0.10, 0.55);
 
-        // Store base scale in a CSS variable so pulse can build on it
         yesBtn.style.setProperty("--yesScale", yesScale);
         yesBtn.style.transform = `scale(${yesScale})`;
 
         noBtn.style.transform  = `scale(${noScale})`;
 
-        // Give extra vertical space as yes grows (prevents overlap)
-        const extra = Math.min(40 + (noCount * 8), 90);
-        btnArea.style.minHeight = (70 + extra) + "px";
-
-        // Turn on “juicy” mode when your funny line hits
-        // (your “big and juicy” line is the 4th item => noCount >= 4)
+        // Turn on glow/pulse at the 4th "No" (your juicy line)
         if (noCount >= 4) yesBtn.classList.add("juicy");
     }
 
+    function rectsOverlap(a, b) {
+        return !(
+            a.right  <= b.left  ||
+            a.left   >= b.right ||
+            a.bottom <= b.top   ||
+            a.top    >= b.bottom
+        );
+    }
+
     function moveNoButton() {
-        // Ensure the button area is the positioning container
-        // (buttons area already has position:relative in the CSS)
+        // Ensure positioning inside the arena
         const areaRect = btnArea.getBoundingClientRect();
 
-        // Temporarily measure the button at its current size
-        // (getBoundingClientRect includes transforms, which is good here)
-        const btnRect = noBtn.getBoundingClientRect();
+        // Yes button rect (in viewport coords)
+        const yesRect = yesBtn.getBoundingClientRect();
 
-        // Compute max X/Y so the button stays inside the area
-        const maxX = Math.max(0, areaRect.width - btnRect.width);
-        const maxY = Math.max(0, areaRect.height - btnRect.height);
-
-        // Random position
-        let x = Math.floor(Math.random() * (maxX + 1));
-        let y = Math.floor(Math.random() * (maxY + 1));
-
-        // Keep it comfortably inside (avoid hugging edges)
-        const margin = 8;
-        x = Math.max(margin, Math.min(x, maxX - margin));
-        y = Math.max(margin, Math.min(y, maxY - margin));
-
-        // Switch to absolute positioning within the area
+        // We position No absolutely within the arena
         noBtn.style.position = "absolute";
-        noBtn.style.left = x + "px";
-        noBtn.style.top  = y + "px";
+
+        // We'll try a few random spots and pick one that doesn't overlap Yes
+        const attempts = 25;
+        const margin = 10;
+
+        // Measure No size (includes transforms)
+        const noRectNow = noBtn.getBoundingClientRect();
+        const noW = noRectNow.width;
+        const noH = noRectNow.height;
+
+        const maxX = Math.max(0, areaRect.width - noW);
+        const maxY = Math.max(0, areaRect.height - noH);
+
+        for (let i = 0; i < attempts; i++) {
+            let x = Math.floor(Math.random() * (maxX + 1));
+            let y = Math.floor(Math.random() * (maxY + 1));
+
+            x = Math.max(margin, Math.min(x, maxX - margin));
+            y = Math.max(margin, Math.min(y, maxY - margin));
+
+            // Convert this candidate position into viewport rect for overlap test
+            const candidate = {
+            left: areaRect.left + x,
+            top: areaRect.top + y,
+            right: areaRect.left + x + noW,
+            bottom: areaRect.top + y + noH
+            };
+
+            if (!rectsOverlap(candidate, yesRect)) {
+            noBtn.style.left = x + "px";
+            noBtn.style.top  = y + "px";
+            return;
+            }
+        }
+
+        // Fallback: if we can't find a spot, stick to bottom-right-ish
+        noBtn.style.left = Math.max(margin, maxX - 20) + "px";
+        noBtn.style.top  = Math.max(margin, maxY - 20) + "px";
     }
 
     noBtn.addEventListener("click", () => {

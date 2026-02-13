@@ -430,8 +430,18 @@ body{
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 10px;
+
   position: relative;
-  min-height: 64px;
+  width: 100%;
+
+  /* Fixed play area so buttons can grow/move without touching text */
+  min-height: 130px;
+  padding: 18px 14px;
+
+  border-radius: 24px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,47,110,.14);
+  overflow: hidden; /* keeps No from escaping */
 }
 
 .btn{
