@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>For Keira v11</title>
+  <title>For Keira v12</title>
 
   <!-- Cute friendly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -829,24 +829,61 @@
     let currentStep = 1;
 
     function goToStep(n){
-      currentStep = n;
-      step1.classList.add("hidden");
-      step2.classList.add("hidden");
-      step3.classList.add("hidden");
+        currentStep = n;
 
-      if (n === 1){
-        stepLabel.textContent = "STEP 1";
-        step1.classList.remove("hidden");
-      } else if (n === 2){
-        stepLabel.textContent = "STEP 2";
-        step2.classList.remove("hidden");
-      } else {
-        // Ensure the No button starts somewhere sensible in the arena
+        // Hide all
+        step1.classList.add("hidden");
+        step2.classList.add("hidden");
+        step3.classList.add("hidden");
+
+        if (n === 1){
+            stepLabel.textContent = "STEP 1";
+            step1.classList.remove("hidden");
+            return;
+        }
+
+        if (n === 2){
+            stepLabel.textContent = "STEP 2";
+            step2.classList.remove("hidden");
+            return;
+        }
+
+        // STEP 3 (Question)
+        stepLabel.textContent = "STEP 3";
+        step3.classList.remove("hidden");
+
+        // ---------- Reset / initialise question state ----------
+        // Reset counters + UI
+        noCount = 0;
+        noHoverDodgedOnce = false;
+        funnyLine.textContent = "";
+        finalBox.classList.add("hidden");
+
+        // Re-enable No button (in case you tested Yes already)
+        noBtn.disabled = false;
+        noBtn.style.opacity = "";
+        noBtn.style.cursor = "";
+
+        // Ensure arena is the positioning container (CSS should already be position:relative)
+        // Anchor YES in the center
+        yesBtn.style.position = "absolute";
+        yesBtn.style.left = "50%";
+        yesBtn.style.top  = "50%";
+        yesBtn.classList.remove("juicy");
+        yesBtn.style.setProperty("--yesScale", 1);
+        yesBtn.style.transform = "translate(-50%, -50%) scale(1)";
+
+        // Anchor NO near the right side
         noBtn.style.position = "absolute";
         noBtn.style.left = "70%";
         noBtn.style.top  = "50%";
-        noBtn.style.transform = `translate(-50%, -50%) scale(1)`;
-      }
+        noBtn.style.transform = "translate(-50%, -50%) scale(1)";
+
+        // If the layout is still settling (fonts/images), re-apply once on next frame
+        requestAnimationFrame(() => {
+            yesBtn.style.transform = "translate(-50%, -50%) scale(1)";
+            noBtn.style.transform  = "translate(-50%, -50%) scale(1)";
+        });
     }
 
     // Tap anywhere in the app card advances (except when clicking buttons)
