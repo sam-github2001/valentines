@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>For Keira v20</title>
+  <title>For Keira v21</title>
 
   <!-- Cute friendly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -383,34 +383,39 @@
         stepLabel.textContent = "STEP 3";
         step3.classList.remove("hidden");
 
-        // reset state
+        // ---------- Reset / initialise question state ----------
         noCount = 0;
         noHoverDodgedOnce = false;
         funnyLine.textContent = "";
         finalBox.classList.add("hidden");
 
+        // Re-enable No button (in case you previously clicked Yes)
         noBtn.disabled = false;
         noBtn.style.opacity = "";
         noBtn.style.cursor = "";
 
-        // IMPORTANT: do NOT force absolute positioning anymore
-        yesBtn.style.position = "";
-        yesBtn.style.left = "";
-        yesBtn.style.top = "";
-        yesBtn.style.transform = "scale(1)";
+        // IMPORTANT: let CSS flexbox center them initially (do NOT force absolute positioning)
         yesBtn.classList.remove("juicy");
         yesBtn.style.setProperty("--yesScale", 1);
 
+        // Clear any old inline positioning that might have been set earlier
+        yesBtn.style.position = "";
+        yesBtn.style.left = "";
+        yesBtn.style.top = "";
         noBtn.style.position = "";
         noBtn.style.left = "";
         noBtn.style.top = "";
-        noBtn.style.transform = "scale(1)";
 
-        // If the layout is still settling (fonts/images), re-apply once on next frame
-        requestAnimationFrame(() => {
-            yesBtn.style.transform = "translate(-50%, -50%) scale(1)";
-            noBtn.style.transform  = "translate(-50%, -50%) scale(1)";
-        });
+        // Reset transforms to a clean baseline (scales only)
+        yesBtn.style.transform = "scale(1)";
+        noBtn.style.transform  = "scale(1)";
+
+        // Optional: if you ever moved NO with px coordinates, clear them too
+        noBtn.style.removeProperty("right");
+        noBtn.style.removeProperty("bottom");
+
+        // No requestAnimationFrame transform here —
+        // that was re-introducing the translate(-50%, -50%) which breaks centering.
     }
 
     // Tap anywhere in the app card advances (except when clicking buttons)
