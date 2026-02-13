@@ -3,46 +3,73 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0b0b12" />
-  <title>For Keira 💘</title>
+  <meta name="theme-color" content="#17060D" />
+  <title>For Keira</title>
+
+  <!-- Soft, romantic fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500,650&family=Inter:wght@400,500,600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- Background sparkle layer -->
+  <!-- Ambient background -->
   <div class="bg" aria-hidden="true">
-    <div class="glow g1"></div>
-    <div class="glow g2"></div>
-    <div class="glow g3"></div>
+    <div class="bg__glow bg__glow--a"></div>
+    <div class="bg__glow bg__glow--b"></div>
+    <div class="bg__glow bg__glow--c"></div>
+
+    <!-- subtle hearts pattern -->
+    <svg class="bg__pattern" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <pattern id="hearts" width="90" height="90" patternUnits="userSpaceOnUse">
+          <path d="M45 62 C30 50, 18 40, 18 28 C18 18, 26 10, 36 10 C42 10, 47 13, 45 18 C43 13, 48 10, 54 10 C64 10, 72 18, 72 28 C72 40, 60 50, 45 62 Z"
+                fill="rgba(255,255,255,0.05)"/>
+        </pattern>
+        <linearGradient id="fade" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="rgba(0,0,0,0)" />
+          <stop offset="1" stop-color="rgba(0,0,0,0.22)" />
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="800" fill="url(#hearts)"/>
+      <rect width="1200" height="800" fill="url(#fade)"/>
+    </svg>
   </div>
 
   <!-- Gate (pre-Feb 14) -->
   <main id="gate" class="screen hidden">
-    <div class="card gate-card">
-      <div class="gate-top">
-        <button id="gateHeart" class="heart-btn" aria-label="Heart">
-          <span class="heart-icon">💌</span>
-        </button>
-        <div class="gate-title">
-          <div class="pill">Just a little early</div>
-          <h1>Open me tomorrow</h1>
-          <p class="sub">This unlocks on Valentine’s Day.</p>
-        </div>
-      </div>
+    <div class="gate">
+      <div class="gate__card">
+        <div class="gate__iconWrap">
+          <button id="gateHeart" class="gate__iconBtn" type="button" aria-label="Open">
+            <!-- heart icon (no emoji) -->
+            <svg class="gate__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s-7-4.5-9.5-8.8C.6 8.6 2.3 5.7 5.3 4.8c1.9-.6 3.8.1 4.9 1.4 1.1-1.3 3-2 4.9-1.4 3 .9 4.7 3.8 2.8 7.4C19 16.5 12 21 12 21z"/>
+            </svg>
+          </button>
 
-      <div class="gate-mid">
-        <div class="count-wrap">
-          <div class="count-label">Countdown</div>
-          <div id="countdown" class="countdown">—</div>
+          <div class="gate__badge">Scheduled</div>
         </div>
 
-        <div class="tiny tip">
-          Tip: If you’re Sam testing this, press <kbd>/</kbd> to bypass.
-        </div>
-      </div>
+        <div class="gate__content">
+          <h1 class="gate__title">Open me tomorrow</h1>
+          <p class="gate__subtitle">
+            This page unlocks on Valentine’s Day.
+          </p>
 
-      <div class="gate-bottom tiny">
-        Made with love (and mild secrecy).
+          <div class="gate__countdownCard">
+            <div class="gate__countdownLabel">Unlocks in</div>
+            <div id="countdown" class="gate__countdownValue">—</div>
+            <div class="gate__countdownNote">Brisbane time</div>
+          </div>
+
+          <div class="gate__fineprint">
+            <!-- hidden-ish testing note; can remove if you want -->
+            <span class="gate__hint">Press <kbd>/</kbd> to bypass (testing)</span>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -50,38 +77,39 @@
   <!-- Main App -->
   <main id="app" class="screen hidden">
     <header class="hero">
-      <div class="hero-inner">
-        <div class="hero-mark" aria-hidden="true">💖</div>
+      <div class="hero__inner">
+        <div class="hero__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s-7-4.5-9.5-8.8C.6 8.6 2.3 5.7 5.3 4.8c1.9-.6 3.8.1 4.9 1.4 1.1-1.3 3-2 4.9-1.4 3 .9 4.7 3.8 2.8 7.4C19 16.5 12 21 12 21z"/>
+          </svg>
+        </div>
         <div>
-          <h1>Hi Keira</h1>
-          <p class="sub">I made you a tiny page of our favourite moments.</p>
+          <h1 class="hero__title">Hi Keira</h1>
+          <p class="hero__sub">I made you a small page of favourite moments.</p>
         </div>
       </div>
     </header>
 
     <section class="card">
-      <div class="section-head">
+      <div class="sectionHead">
         <h2>Little scrapbook</h2>
-        <p class="sub">A few highlights I keep replaying in my head.</p>
+        <p class="sub">A few highlights I keep replaying.</p>
       </div>
 
-      <div class="grid" id="memoryGrid">
-        <!-- Replace photos + captions -->
+      <div class="grid">
+        <!-- Replace these with your real photos + captions -->
         <figure class="mem">
           <img src="photos/01.jpg" alt="A memory of us" loading="lazy" />
           <figcaption>That day we couldn’t stop laughing.</figcaption>
         </figure>
-
         <figure class="mem">
           <img src="photos/02.jpg" alt="A memory of us" loading="lazy" />
           <figcaption>My favourite person, my favourite place.</figcaption>
         </figure>
-
         <figure class="mem">
           <img src="photos/03.jpg" alt="A memory of us" loading="lazy" />
           <figcaption>Proof that “us” is my best idea.</figcaption>
         </figure>
-
         <figure class="mem">
           <img src="photos/04.jpg" alt="A memory of us" loading="lazy" />
           <figcaption>Just… you. And how lucky I am.</figcaption>
@@ -100,21 +128,21 @@
         </div>
 
         <div class="note">
-          <h3>Favourite “tiny” moments</h3>
+          <h3>Favourite tiny moments</h3>
           <ul>
-            <li>When we catch each other’s eyes and smirk.</li>
-            <li>When you’re telling a story and get animated.</li>
-            <li>When we end up laughing at something dumb for ages.</li>
-            <li>When you steal the blanket and pretend you didn’t.</li>
+            <li>That look we share when something is funny.</li>
+            <li>When you tell a story and get animated.</li>
+            <li>When we laugh at something dumb for ages.</li>
+            <li>When you steal the blanket and deny it.</li>
           </ul>
         </div>
       </div>
     </section>
 
     <section class="card ask">
-      <div class="ask-head">
+      <div class="askHead">
         <h2 id="question">Will you be my Valentine?</h2>
-        <p class="sub" id="subline">Be honest. (But also choose wisely.)</p>
+        <p class="sub" id="subline">Choose carefully.</p>
       </div>
 
       <div class="buttons">
@@ -126,49 +154,38 @@
     </section>
 
     <section id="celebrate" class="card celebrate hidden" aria-live="polite">
-      <div class="celebrate-top">
-        <div class="celebrate-emoji" aria-hidden="true">🥰</div>
+      <div class="celebrateTop">
+        <div class="celebrateIcon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s-7-4.5-9.5-8.8C.6 8.6 2.3 5.7 5.3 4.8c1.9-.6 3.8.1 4.9 1.4 1.1-1.3 3-2 4.9-1.4 3 .9 4.7 3.8 2.8 7.4C19 16.5 12 21 12 21z"/>
+          </svg>
+        </div>
         <div>
           <h2>Best news ever</h2>
-          <p class="sub">You just made my whole week.</p>
+          <p class="sub">Happy Valentine’s Day.</p>
         </div>
       </div>
 
-      <div class="celebrate-mid">
-        <div class="chips" aria-hidden="true">
-          <span class="chip">🌹</span>
-          <span class="chip">🍫</span>
-          <span class="chip">✨</span>
-          <span class="chip">💖</span>
-        </div>
-        <p class="tiny">
-          Happy Valentine’s Day, Keira. I love you. — Sam
-        </p>
-      </div>
+      <p class="tiny celebrateNote">I love you. — Sam</p>
 
-      <div class="celebrate-actions">
+      <div class="celebrateActions">
         <button id="confettiBtn" class="btn yes" type="button">Again</button>
         <button id="scrollTopBtn" class="btn ghost" type="button">Back to top</button>
       </div>
     </section>
 
-    <!-- Optional music -->
     <audio id="song" src="audio/song.mp3" preload="auto"></audio>
 
     <footer class="footer tiny">
-      Built by Sam • Powered by love • Deployed with questionable confidence
+      Built by Sam
     </footer>
   </main>
 
   <script>
     // -------------------------------
-    // SETTINGS
+    // Gate settings
     // -------------------------------
-    // Valentine unlock (Brisbane +10)
-    // Change year if needed.
-    const UNLOCK_AT = new Date("2026-02-14T00:00:00+10:00");
-
-    // Secret bypass key
+    const UNLOCK_AT = new Date("2026-02-14T00:00:00+10:00"); // Brisbane
     const BYPASS_KEY = "/";
 
     // -------------------------------
@@ -191,7 +208,7 @@
     const song = document.getElementById("song");
 
     // -------------------------------
-    // Gate logic
+    // Helpers
     // -------------------------------
     function pad(n){ return String(n).padStart(2, "0"); }
 
@@ -208,31 +225,29 @@
 
     function updateCountdown() {
       const t = UNLOCK_AT - new Date();
-      if (t <= 0) {
-        showApp();
-        return;
-      }
+      if (t <= 0) { showApp(); return; }
+
       const s = Math.floor(t / 1000);
       const d = Math.floor(s / 86400);
       const h = Math.floor((s % 86400) / 3600);
       const m = Math.floor((s % 3600) / 60);
       const sec = s % 60;
-      countdownEl.textContent = `${d}d ${pad(h)}:${pad(m)}:${pad(sec)} (Brisbane time)`;
+
+      countdownEl.textContent = `${d}d ${pad(h)}:${pad(m)}:${pad(sec)}`;
       setTimeout(updateCountdown, 250);
     }
 
-    // secret bypass via "/"
     function enableBypass() {
       showApp();
-      // optional: mark in session so refreshing stays bypassed
       try { sessionStorage.setItem("val_bypass", "1"); } catch (_) {}
     }
 
+    // '/' bypass
     document.addEventListener("keydown", (e) => {
       if (e.key === BYPASS_KEY) enableBypass();
     });
 
-    // mobile-friendly bypass: long press the heart for ~1.2s
+    // Mobile-friendly bypass: long press the heart (~1.2s)
     let pressTimer = null;
     gateHeart.addEventListener("pointerdown", () => {
       pressTimer = setTimeout(enableBypass, 1200);
@@ -240,7 +255,7 @@
     gateHeart.addEventListener("pointerup", () => clearTimeout(pressTimer));
     gateHeart.addEventListener("pointerleave", () => clearTimeout(pressTimer));
 
-    // initial gate decision
+    // Initial state
     const now = new Date();
     const bypassed = (() => {
       try { return sessionStorage.getItem("val_bypass") === "1"; } catch (_) { return false; }
@@ -250,15 +265,14 @@
     else showGate();
 
     // -------------------------------
-    // "No" flow — playful but not cringe
+    // "No" flow (playful, clean)
     // -------------------------------
     const prompts = [
-      { q: "Are you sure?", s: "I think you mis-clicked. Try again." },
-      { q: "Wait… for real?", s: "Double-check your answer for accuracy." },
-      { q: "Okay, but consider the perks.", s: "There may be chocolate involved." },
-      { q: "This feels like a bug.", s: "Let’s rerun the test with ‘Yes’." },
-      { q: "I’m going to ask again nicely.", s: "Will you be my Valentine?" },
-      { q: "Final answer?", s: "No pressure. (Tiny pressure.)" }
+      { q: "Are you sure?", s: "Try that again." },
+      { q: "Confirm your selection.", s: "Just to be certain." },
+      { q: "That seems unlikely.", s: "Please review your answer." },
+      { q: "One more time.", s: "For accuracy." },
+      { q: "Will you be my Valentine?", s: "This is the correct one." }
     ];
 
     let noCount = 0;
@@ -279,12 +293,11 @@
 
       hintEl.textContent =
         noCount < 2 ? "" :
-        noCount < 4 ? "Hint: the correct answer is ‘Yes’ 🙂" :
-        "I have improved the ‘Yes’ button for better usability.";
+        noCount < 4 ? "Hint: the correct answer is “Yes”." :
+        "Usability improvements have been applied.";
 
       setButtonScales();
 
-      // subtle shake
       noBtn.animate(
         [
           { transform: noBtn.style.transform + " translateX(0px)" },
@@ -296,7 +309,6 @@
       );
     });
 
-    // Optional: after a few "No"s, the button becomes evasive (subtle)
     noBtn.addEventListener("mouseenter", () => {
       if (noCount < 4) return;
       const x = Math.floor((Math.random() * 110) - 55);
@@ -309,12 +321,14 @@
     // -------------------------------
     // Yes -> celebration
     // -------------------------------
-    function burstConfetti() {
-      const emojis = ["💖","✨","🌹","🍫","🥰","💘"];
+    function burstHearts() {
       for (let i = 0; i < 26; i++) {
         const s = document.createElement("span");
         s.className = "confetti";
-        s.textContent = emojis[(Math.random() * emojis.length) | 0];
+        s.innerHTML = `
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7-4.5-9.5-8.8C.6 8.6 2.3 5.7 5.3 4.8c1.9-.6 3.8.1 4.9 1.4 1.1-1.3 3-2 4.9-1.4 3 .9 4.7 3.8 2.8 7.4C19 16.5 12 21 12 21z"/>
+          </svg>`;
         s.style.left = (Math.random() * 100) + "vw";
         s.style.animationDuration = (1.5 + Math.random() * 1.7) + "s";
         document.body.appendChild(s);
@@ -325,12 +339,11 @@
     yesBtn.addEventListener("click", async () => {
       celebrateEl.classList.remove("hidden");
       celebrateEl.scrollIntoView({ behavior: "smooth", block: "center" });
-      burstConfetti();
-
+      burstHearts();
       try { await song.play(); } catch (_) {}
     });
 
-    confettiBtn.addEventListener("click", burstConfetti);
+    confettiBtn.addEventListener("click", burstHearts);
     scrollTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   </script>
 </body>
