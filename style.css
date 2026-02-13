@@ -1,416 +1,145 @@
-:root{
-  --bg0:#17060D;
-  --bg1:#250813;
-
-  --card: rgba(255,255,255,.10);
-  --border: rgba(255,255,255,.16);
-
-  --text: rgba(255,255,255,.94);
-  --muted: rgba(255,255,255,.76);
-
-  --rose:#ff2d6f;
-  --pink:#ff6aa5;
-  --blush:#ffb3cf;
-
-  --yesA:#ff2d6f;
-  --yesB:#ff8db8;
-
-  --noA: rgba(255,255,255,.12);
-  --noB: rgba(255,255,255,.06);
-
-  --shadow: 0 22px 70px rgba(0,0,0,.46);
-  --radiusXL: 28px;
-  --radiusL: 22px;
+*{
+  box-sizing: border-box;
 }
-
-*{ box-sizing:border-box; }
-
-html,body{ height:100%; }
 
 body{
   margin:0;
-  color:var(--text);
-  background: radial-gradient(1200px 700px at 20% 5%, rgba(255,45,111,.22), transparent 55%),
-              radial-gradient(900px 600px at 80% 20%, rgba(255,106,165,.18), transparent 58%),
-              radial-gradient(1100px 800px at 50% 95%, rgba(255,179,207,.10), transparent 60%),
-              linear-gradient(180deg, var(--bg1), var(--bg0));
-  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-family: "Nunito", sans-serif;
+
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,120,160,.35), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(255,70,130,.25), transparent 45%),
+    linear-gradient(180deg, #ff7aa2, #ff4d88);
 }
 
+/* Screens */
 .hidden{ display:none; }
 
-.screen{
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 32px 18px 54px;
-}
-
-/* Ambient background layer */
-.bg{ position:fixed; inset:0; pointer-events:none; z-index:-1; }
-.bg__glow{
-  position:absolute;
-  border-radius:999px;
-  filter: blur(48px);
-  opacity:.55;
-}
-.bg__glow--a{ width: 760px; height: 560px; left:-220px; top:-170px; background: rgba(255,45,111,.30); }
-.bg__glow--b{ width: 820px; height: 560px; right:-260px; top:-130px; background: rgba(255,106,165,.22); }
-.bg__glow--c{ width: 980px; height: 720px; left: 8%; bottom:-330px; background: rgba(255,179,207,.14); }
-
-.bg__pattern{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  opacity:.6;
-}
-
-/* Cards */
-.card{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radiusL);
-  padding: 18px;
-  backdrop-filter: blur(14px);
-  box-shadow: var(--shadow);
-  margin: 16px 0;
-}
-
-/* Typography */
-h1,h2,h3{
-  font-family: "Fraunces", ui-serif, Georgia, serif;
-  letter-spacing: .2px;
-}
-h1{ margin:0 0 8px; font-size: 38px; }
-h2{ margin:0 0 8px; font-size: 24px; }
-h3{ margin:0 0 10px; font-size: 18px; }
-
-.sub{
-  margin:0;
-  color:var(--muted);
-  font-size: 15px;
-  line-height: 1.6;
-}
-.tiny{
-  color:var(--muted);
-  font-size: 13px;
-}
-
-/* Gate (cute valentines card) */
+/* Waiting Page */
 .gate{
-  min-height: calc(100vh - 86px);
-  display:grid;
-  place-items:center;
-  padding: 18px 0;
-}
-
-.gate__card{
-  width: min(780px, 100%);
-  border-radius: 44px;                 /* MUCH rounder */
-  padding: 34px 30px;
-  background:
-    radial-gradient(520px 280px at 18% 15%, rgba(255, 90, 150, .40), transparent 60%),
-    radial-gradient(560px 320px at 85% 35%, rgba(255, 170, 210, .35), transparent 62%),
-    radial-gradient(720px 460px at 50% 120%, rgba(255, 60, 120, .18), transparent 60%),
-    rgba(255,255,255,.10);
-  border: 1px solid rgba(255,255,255,.22);
-  box-shadow: 0 40px 110px rgba(0,0,0,.55);
-  position: relative;
-  overflow:hidden;
-}
-
-/* Soft “paper” overlay */
-.gate__card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-  pointer-events:none;
-}
-
-/* Floating hearts pattern (subtle) */
-.gate__card::before{
-  content:"";
-  position:absolute;
-  inset:-40px;
-  opacity:.20;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,.45) 0 2px, transparent 3px),
-    radial-gradient(circle at 70% 30%, rgba(255,255,255,.45) 0 2px, transparent 3px),
-    radial-gradient(circle at 40% 70%, rgba(255,255,255,.45) 0 2px, transparent 3px);
-  filter: blur(0.2px);
-  pointer-events:none;
-}
-
-.gate__iconWrap{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position: relative;
-  z-index:1;
-}
-
-.gate__iconBtn{
-  width: 64px;
-  height: 64px;
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.24);
-  background: rgba(255,255,255,.14);
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  transition: transform .15s ease, background .15s ease;
-  box-shadow: 0 18px 44px rgba(0,0,0,.28);
-}
-
-.gate__iconBtn:hover{ background: rgba(255,255,255,.18); }
-.gate__iconBtn:active{ transform: translateY(1px); }
-
-.gate__icon{
-  width: 28px;
-  height: 28px;
-  fill: rgba(255,255,255,.96);
-  filter: drop-shadow(0 12px 18px rgba(255,60,120,.25));
-}
-
-.gate__badge{
-  font-size: 12px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.22);
-  background: rgba(255,255,255,.12);
-  color: rgba(255,255,255,.92);
-}
-
-.gate__content{
-  margin-top: 18px;
-  position: relative;
-  z-index:1;
-}
-
-.gate__title{
-  margin: 4px 0 10px;
-  font-family: "Fredoka", system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 52px;
-  letter-spacing: .2px;
-  line-height: 1.05;
-}
-
-.gate__subtitle{
-  margin: 0 0 18px;
-  font-family: "Nunito", system-ui, sans-serif;
-  font-size: 16px;
-  color: rgba(255,255,255,.86);
-  max-width: 52ch;
-}
-
-/* Countdown card */
-.gate__countdownCard{
-  border-radius: 26px;
-  border: 1px solid rgba(255,255,255,.22);
-  background: rgba(255,255,255,.14);
-  padding: 16px 18px 14px;
-  width: min(460px, 100%);
-  box-shadow: 0 18px 50px rgba(0,0,0,.22);
-}
-
-.gate__countdownLabel{
-  font-family: "Nunito", system-ui, sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,.82);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-}
-
-.gate__countdownValue{
-  font-family: "Fredoka", system-ui, sans-serif;
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  color: rgba(255,255,255,.95);
-}
-
-.gate__countdownNote{
-  margin-top: 6px;
-  font-family: "Nunito", system-ui, sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,.80);
-}
-
-/* Smaller screens */
-@media (max-width: 740px){
-  .gate__card{ padding: 26px 20px; border-radius: 36px; }
-  .gate__title{ font-size: 40px; }
-}
-
-/* Hero */
-.hero{ padding: 10px 0 8px; }
-.hero__inner{
-  display:flex;
-  align-items:center;
-  gap: 14px;
-}
-.hero__mark{
-  width: 46px;
-  height: 46px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
-  display:grid;
-  place-items:center;
-  box-shadow: 0 16px 40px rgba(0,0,0,.30);
-}
-.hero__mark svg{ width: 22px; height: 22px; fill: rgba(255,255,255,.92); }
-.hero__title{ margin:0 0 6px; }
-.hero__sub{ margin:0; color:var(--muted); }
-
-/* Layout sections */
-.sectionHead{ margin-bottom: 10px; }
-
-/* Memory grid */
-.grid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 12px;
-}
-@media (max-width: 740px){
-  .grid{ grid-template-columns: 1fr; }
-  h1{ font-size: 34px; }
-  .gate__title{ font-size: 38px; }
-}
-
-.mem{
-  margin:0;
-  border-radius: 22px;
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.05);
-}
-.mem img{
   width:100%;
-  height: 240px;
-  object-fit: cover;
-  display:block;
-}
-.mem figcaption{
-  padding: 10px 12px 12px;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-/* Split notes */
-.split{
-  margin-top: 14px;
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-@media (max-width: 740px){
-  .split{ grid-template-columns: 1fr; }
-}
-
-.note{
-  padding: 14px;
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
-}
-.note ul{ margin: 0; padding-left: 18px; }
-.note li{ margin: 6px 0; }
-
-/* Ask */
-.ask{ text-align:center; }
-.askHead{ margin-bottom: 10px; }
-.buttons{
   display:flex;
   justify-content:center;
-  align-items:center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 12px;
+}
+
+.gate-card{
+  width: min(760px, 92%);
+  background: white;
+  border-radius: 42px;
+  padding: 40px;
+  text-align:center;
+
+  box-shadow: 0 30px 80px rgba(0,0,0,.25);
+}
+
+.gate-icon{
+  display:flex;
+  justify-content:center;
+  margin-bottom: 10px;
+}
+
+/* Heart (no emoji, cleaner) */
+.heart{
+  width:60px;
+  height:60px;
+  background:#ff4d88;
+  transform: rotate(-45deg);
+  position: relative;
+  border-radius: 12px;
+}
+
+.heart::before,
+.heart::after{
+  content:"";
+  position:absolute;
+  width:60px;
+  height:60px;
+  background:#ff4d88;
+  border-radius: 50%;
+}
+
+.heart::before{ top:-30px; left:0; }
+.heart::after{ left:30px; top:0; }
+
+h1{
+  font-family: "Fredoka", sans-serif;
+  font-size: 48px;
+  margin: 12px 0;
+  color: #d81b60;
+}
+
+.subtitle{
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.countdown-box{
+  background: #ffe4ec;
+  border-radius: 26px;
+  padding: 18px;
+}
+
+.label{
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #d81b60;
+}
+
+.countdown{
+  font-family: "Fredoka", sans-serif;
+  font-size: 26px;
+  color: #c2185b;
+  margin-top: 6px;
+}
+
+/* Main Page */
+.card{
+  background:white;
+  border-radius: 32px;
+  padding: 40px;
+  text-align:center;
+  box-shadow: 0 30px 80px rgba(0,0,0,.25);
+}
+
+.buttons{
+  margin-top: 18px;
+  display:flex;
+  gap:12px;
+  justify-content:center;
 }
 
 .btn{
-  border: none;
-  cursor: pointer;
-  padding: 14px 18px;
+  border:none;
+  padding: 14px 22px;
   border-radius: 16px;
-  font-weight: 800;
-  font-size: 16px;
-  transition: transform .15s ease, filter .15s ease;
-  user-select:none;
-  box-shadow: 0 14px 34px rgba(0,0,0,.26);
+  font-weight:700;
+  cursor:pointer;
+  transition: .2s;
 }
 
 .btn.yes{
-  color: rgba(255,255,255,.96);
-  background: linear-gradient(135deg, var(--yesA), var(--yesB));
+  background:#ff4d88;
+  color:white;
 }
+
 .btn.no{
-  color: rgba(255,255,255,.90);
-  background: linear-gradient(135deg, var(--noA), var(--noB));
-  border: 1px solid rgba(255,255,255,.16);
-}
-.btn.ghost{
-  color: rgba(255,255,255,.90);
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.16);
-  box-shadow: none;
+  background:#f8bbd0;
 }
 
-.btn:hover{ filter: brightness(1.04); }
-.btn:active{ transform: translateY(1px) scale(.99); }
-
-.hint{ margin-top: 10px; min-height: 18px; }
-
-/* Celebrate */
-.celebrateTop{
-  display:flex;
-  gap: 12px;
-  align-items:center;
+.btn:hover{
+  transform: translateY(-1px);
 }
-.celebrateIcon{
-  width: 44px;
-  height: 44px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
-  display:grid;
-  place-items:center;
-}
-.celebrateIcon svg{ width: 22px; height: 22px; fill: rgba(255,255,255,.92); }
-.celebrateActions{
-  display:flex;
-  justify-content:center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-.celebrateNote{ margin-top: 10px; }
 
-/* Footer */
-.footer{ text-align:center; margin-top: 18px; opacity: .9; }
-
-/* Heart confetti */
-.confetti{
-  position: fixed;
-  top: -30px;
-  width: 18px;
-  height: 18px;
-  pointer-events: none;
-  z-index: 9999;
-  animation: fall linear forwards;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,.30));
-}
-.confetti svg{ width:100%; height:100%; fill: rgba(255,106,165,.92); }
-
-@keyframes fall{
-  to{
-    transform: translateY(110vh) rotate(260deg);
-    opacity: 0.95;
-  }
+.response{
+  margin-top: 20px;
+  font-family: "Fredoka", sans-serif;
+  font-size: 20px;
+  color:#c2185b;
 }
