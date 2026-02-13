@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>For Keira v13</title>
+  <title>For Keira v14</title>
 
   <!-- Cute friendly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -714,12 +714,30 @@
     const song = document.getElementById("song");
 
     let noHoverDodgedOnce = false;
+    let tapCount = 0;
+    let tapTimer = null;
 
     noBtn.addEventListener("mouseenter", () => {
         // Only on the 4th No, and only once
         if (noCount === 4 && !noHoverDodgedOnce) {
             noHoverDodgedOnce = true;
             moveNoButton();
+        }
+        });
+
+    gate.addEventListener("touchstart", () => {
+
+        tapCount++;
+
+        clearTimeout(tapTimer);
+
+        tapTimer = setTimeout(() => {
+            tapCount = 0;
+        }, 500);   // tap window
+
+        if (tapCount === 3) {
+            enableBypass();
+            tapCount = 0;
         }
         });
     // =========================================================
