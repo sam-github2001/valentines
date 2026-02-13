@@ -379,36 +379,32 @@
             return;
         }
 
-        // STEP 3 (Question)
+        // STEP 3 init (Question)
         stepLabel.textContent = "STEP 3";
         step3.classList.remove("hidden");
 
-        // ---------- Reset / initialise question state ----------
-        // Reset counters + UI
+        // reset state
         noCount = 0;
         noHoverDodgedOnce = false;
         funnyLine.textContent = "";
         finalBox.classList.add("hidden");
 
-        // Re-enable No button (in case you tested Yes already)
         noBtn.disabled = false;
         noBtn.style.opacity = "";
         noBtn.style.cursor = "";
 
-        // Ensure arena is the positioning container (CSS should already be position:relative)
-        // Anchor YES in the center
-        yesBtn.style.position = "absolute";
-        yesBtn.style.left = "50%";
-        yesBtn.style.top  = "50%";
+        // IMPORTANT: do NOT force absolute positioning anymore
+        yesBtn.style.position = "";
+        yesBtn.style.left = "";
+        yesBtn.style.top = "";
+        yesBtn.style.transform = "scale(1)";
         yesBtn.classList.remove("juicy");
         yesBtn.style.setProperty("--yesScale", 1);
-        yesBtn.style.transform = "translate(-50%, -50%) scale(1)";
 
-        // Anchor NO near the right side
-        noBtn.style.position = "absolute";
-        noBtn.style.left = "70%";
-        noBtn.style.top  = "50%";
-        noBtn.style.transform = "translate(-50%, -50%) scale(1)";
+        noBtn.style.position = "";
+        noBtn.style.left = "";
+        noBtn.style.top = "";
+        noBtn.style.transform = "scale(1)";
 
         // If the layout is still settling (fonts/images), re-apply once on next frame
         requestAnimationFrame(() => {
@@ -437,11 +433,11 @@
         const yesScale = 1 + cappedNo * 0.18;   // stronger growth
         const noScale  = Math.max(1 - cappedNo * 0.10, 0.50);
 
-        yesBtn.style.transform =
-            `translate(-50%, -50%) scale(${yesScale})`;
+        yesBtn.style.transform = `scale(${yesScale})`;
+        noBtn.style.transform  = `scale(${noScale})`;
 
-        noBtn.style.transform =
-            `translate(-50%, -50%) scale(${noScale})`;
+        // keep juicy in sync
+        yesBtn.style.setProperty("--yesScale", yesScale);
 
         if (noCount >= 3) yesBtn.classList.add("juicy");
     }
