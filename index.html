@@ -662,16 +662,15 @@
 
     // Funny lines for the "No" button
     const NO_LINES = [
-      "Interesting choice. Let’s try that again.",
-      "Are you sure? Like… legally sure?",
-      "I think your finger slipped. It happens.",
-      "That button seems a bit suspicious, hey.",
-      "Your device might be bugged. Tap ‘Yes’ to reboot.",
-      "This is getting awkward for the ‘No’ button.",
-      "Okay the ‘No’ button is going on a diet now.",
-      "Final offer: press Yes and I’ll cook dinner.",
-      "I have upgraded the Yes button for improved accuracy.",
-      "This is a safe space to choose Yes.",
+        "Oh... I think you misclicked. Let's try that again.",
+        "How odd. Almost like you're trying to say no on purpose...",
+        "Woah. How'd that no button get over there? (it wasn't me)",
+        "Is it just me or is that ‘Yes’ button looking big and juicy?",
+        "Ok it’s not funny anymore. I’m about to cry.",
+        "You’re right, married people should have to do this.",
+        "Ok now it’s just awkward.",
+        "I think ur device is broken.",
+        "Final offer: you click yes and I’ll give you a foot rub."
     ];
 
     // Hidden bypass key for testing (not shown)
@@ -851,27 +850,50 @@
     let noCount = 0;
 
     function setButtonScales(){
-      const yesScale = Math.min(1 + noCount * 0.16, 2.8);
-      const noScale  = Math.max(1 - noCount * 0.10, 0.45);
-      yesBtn.style.transform = `scale(${yesScale})`;
-      noBtn.style.transform  = `scale(${noScale})`;
+        const yesScale = Math.min(1 + noCount * 0.12, 1.95);
+        const noScale  = Math.max(1 - noCount * 0.10, 0.50);
+
+        // Store base scale in a CSS variable so pulse can build on it
+        yesBtn.style.setProperty("--yesScale", yesScale);
+        yesBtn.style.transform = `scale(${yesScale})`;
+
+        noBtn.style.transform  = `scale(${noScale})`;
+
+        // Give extra vertical space as yes grows (prevents overlap)
+        const extra = Math.min(40 + (noCount * 8), 90);
+        btnArea.style.minHeight = (70 + extra) + "px";
+
+        // Turn on “juicy” mode when your funny line hits
+        // (your “big and juicy” line is the 4th item => noCount >= 4)
+        if (noCount >= 4) yesBtn.classList.add("juicy");
     }
 
-    function moveNoButton(){
-      // Move within the button area bounds
-      const area = btnArea.getBoundingClientRect();
-      const btn = noBtn.getBoundingClientRect();
+    function moveNoButton() {
+        // Ensure the button area is the positioning container
+        // (buttons area already has position:relative in the CSS)
+        const areaRect = btnArea.getBoundingClientRect();
 
-      const maxX = Math.max(0, area.width - btn.width);
-      const maxY = Math.max(0, area.height - btn.height);
+        // Temporarily measure the button at its current size
+        // (getBoundingClientRect includes transforms, which is good here)
+        const btnRect = noBtn.getBoundingClientRect();
 
-      const x = Math.floor(Math.random() * (maxX + 1));
-      const y = Math.floor(Math.random() * (maxY + 1));
+        // Compute max X/Y so the button stays inside the area
+        const maxX = Math.max(0, areaRect.width - btnRect.width);
+        const maxY = Math.max(0, areaRect.height - btnRect.height);
 
-      // Make it absolute within the area after a few attempts
-      noBtn.style.position = "absolute";
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
+        // Random position
+        let x = Math.floor(Math.random() * (maxX + 1));
+        let y = Math.floor(Math.random() * (maxY + 1));
+
+        // Keep it comfortably inside (avoid hugging edges)
+        const margin = 8;
+        x = Math.max(margin, Math.min(x, maxX - margin));
+        y = Math.max(margin, Math.min(y, maxY - margin));
+
+        // Switch to absolute positioning within the area
+        noBtn.style.position = "absolute";
+        noBtn.style.left = x + "px";
+        noBtn.style.top  = y + "px";
     }
 
     noBtn.addEventListener("click", () => {
@@ -880,7 +902,7 @@
       setButtonScales();
 
       // After a couple of "No"s, it gets evasive
-      if (noCount >= 2) moveNoButton();
+      if (noCount >= 3) moveNoButton();
 
       // Tiny shake
       noBtn.animate(
