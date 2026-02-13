@@ -841,8 +841,11 @@
         stepLabel.textContent = "STEP 2";
         step2.classList.remove("hidden");
       } else {
-        stepLabel.textContent = "STEP 3";
-        step3.classList.remove("hidden");
+        // Ensure the No button starts somewhere sensible in the arena
+        noBtn.style.position = "absolute";
+        noBtn.style.left = "70%";
+        noBtn.style.top  = "50%";
+        noBtn.style.transform = `translate(-50%, -50%) scale(1)`;
       }
     }
 
@@ -882,23 +885,51 @@
     }
 
     function moveNoButton() {
+        // Ensure absolute positioning inside arena
+        noBtn.style.position = "absolute";
 
-        const arena = btnArea.getBoundingClientRect();
-        const btn   = noBtn.getBoundingClientRect();
+        const arenaRect = btnArea.getBoundingClientRect();
 
-        const maxX = arena.width  - btn.width;
-        const maxY = arena.height - btn.height;
+        // Get No button size (including current scale)
+        const noRect = noBtn.getBoundingClientRect();
+        const noW = noRect.width;
+        const noH = noRect.height;
 
-        const margin = 12;
+        // Yes rect (viewport coords) for overlap check
+        const yesRect = yesBtn.getBoundingClientRect();
 
-        const x = Math.max(margin,
-                    Math.random() * (maxX - margin*2));
+        const margin = 10;
 
-        const y = Math.max(margin,
-                    Math.random() * (maxY - margin*2));
+        // Arena-local max ranges (NOT viewport)
+        const maxX = Math.max(0, btnArea.clientWidth  - noW);
+        const maxY = Math.max(0, btnArea.clientHeight - noH);
 
-        noBtn.style.left = x + "px";
-        noBtn.style.top  = y + "px";
+        // Try multiple random spots that don't overlap the YES
+        for (let i = 0; i < 30; i++) {
+            let x = Math.random() * maxX;
+            let y = Math.random() * maxY;
+
+            x = Math.max(margin, Math.min(x, maxX - margin));
+            y = Math.max(margin, Math.min(y, maxY - margin));
+
+            // Convert candidate position to viewport rect for overlap test
+            const candidate = {
+            left: arenaRect.left + x,
+            top: arenaRect.top + y,
+            right: arenaRect.left + x + noW,
+            bottom: arenaRect.top + y + noH
+            };
+
+            if (!rectsOverlap(candidate, yesRect)) {
+            noBtn.style.left = x + "px";
+            noBtn.style.top  = y + "px";
+            return;
+            }
+        }
+
+        // Fallback: bottom-right-ish but still inside
+        noBtn.style.left = Math.max(margin, maxX - margin) + "px";
+        noBtn.style.top  = Math.max(margin, maxY - margin) + "px";
     }
 
     noBtn.addEventListener("click", () => {
@@ -910,15 +941,15 @@
       if (noCount >= 3) moveNoButton();
 
       // Tiny shake
-      noBtn.animate(
+        noBtn.animate(
         [
-          { transform: noBtn.style.transform + " translateX(0px)" },
-          { transform: noBtn.style.transform + " translateX(6px)" },
-          { transform: noBtn.style.transform + " translateX(-6px)" },
-          { transform: noBtn.style.transform + " translateX(0px)" },
+            { transform: "translateX(0px)" },
+            { transform: "translateX(6px)" },
+            { transform: "translateX(-6px)" },
+            { transform: "translateX(0px)" },
         ],
-        { duration: 220, iterations: 1 }
-      );
+        { duration: 220, iterations: 1, composite: "add" }
+        );
     });
 
     yesBtn.addEventListener("click", async () => {

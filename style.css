@@ -427,8 +427,11 @@ body{
 .buttons{
   position: relative;
   width: 100%;
-  height: 160px;          /* Fixed arena height */
+  height: 160px;
   margin-top: 10px;
+
+  overflow: hidden;         /* keep No inside */
+  border-radius: 22px;      /* nicer */
 }
 
 .btnYes{
@@ -461,7 +464,7 @@ body{
   position: relative;
 }
 
-.btn:active{ transform: translateY(1px) scale(.99); }
+.btn:active{ filter: brightness(0.98); }
 .btn:hover{ filter: brightness(1.03); }
 
 .btnYes{
