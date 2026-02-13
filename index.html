@@ -8,74 +8,752 @@
   <!-- Cute friendly fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root{
+      --pink0:#ffd3e1;
+      --pink1:#ff9bbb;
+      --pink2:#ff5a8f;
+      --red1:#ff2f6e;
+      --red2:#d8144c;
+      --cream:#fff7fb;
+      --ink:#3a1630;
+      --muted:#6a3552;
+      --shadow: 0 30px 90px rgba(28, 8, 18, .25);
+      --shadow2: 0 18px 50px rgba(28, 8, 18, .22);
+      --radiusXL: 34px;
+      --radiusL: 26px;
+      --radiusM: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: "Nunito", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 720px at 20% 10%, rgba(255,90,143,.35), transparent 55%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(255,156,196,.40), transparent 55%),
+        radial-gradient(1100px 800px at 50% 110%, rgba(255,47,110,.18), transparent 60%),
+        linear-gradient(180deg, #ff87ad 0%, #ff4e88 55%, #ff2f6e 100%);
+      overflow-x:hidden;
+    }
+
+    /* Soft floating heart background */
+    .bg-hearts{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .20;
+      filter: blur(.1px);
+    }
+
+    .hidden{ display:none !important; }
+
+    .wrap{
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    /* Card baseline */
+    .card{
+      width: min(920px, 94vw);
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: var(--radiusXL);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .header{
+      padding: 18px 22px 0;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.8);
+      font-weight: 800;
+      letter-spacing: .02em;
+      color: var(--red2);
+      font-size: 13px;
+      user-select:none;
+    }
+    .badge .dot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: var(--red1);
+      box-shadow: 0 0 0 6px rgba(255,47,110,.15);
+    }
+
+    .tapHint{
+      font-size: 13px;
+      color: rgba(106,53,82,.85);
+      font-weight: 800;
+      user-select:none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.8);
+      opacity: .0;
+      transform: translateY(-2px);
+      transition: opacity .25s ease, transform .25s ease;
+      white-space: nowrap;
+    }
+    .tapHint.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Gate envelope scene */
+    .gate{
+      padding: 18px 18px 26px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .gateInner{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .gateTitle{
+      text-align:center;
+      padding: 8px 12px 0;
+    }
+    .gateTitle h1{
+      margin: 0;
+      font-family: "Fredoka", system-ui, sans-serif;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.05;
+      color: var(--red2);
+      letter-spacing: .2px;
+    }
+    .gateTitle p{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* Envelope */
+    .envelopeWrap{
+      display:grid;
+      place-items:center;
+      padding: 8px 0 0;
+    }
+
+    .envelope{
+      width: min(560px, 88vw);
+      aspect-ratio: 16 / 10;
+      position: relative;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #fff 0%, #fff6fa 100%);
+      border: 1px solid rgba(255,47,110,.20);
+      box-shadow: var(--shadow2);
+      overflow: hidden;
+    }
+
+    /* inner pink paper */
+    .envelope::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(520px 280px at 20% 10%, rgba(255,90,143,.20), transparent 60%),
+        radial-gradient(520px 280px at 90% 30%, rgba(255,156,196,.24), transparent 60%),
+        linear-gradient(180deg, rgba(255,211,225,.55), rgba(255,255,255,.8));
+      opacity: .95;
+    }
+
+    /* bottom pocket */
+    .pocket{
+      position:absolute;
+      inset: 34% 0 0 0;
+      background: rgba(255,137,173,.22);
+      border-top: 1px solid rgba(255,47,110,.18);
+    }
+
+    /* envelope flaps */
+    .flapLeft, .flapRight, .flapTop{
+      position:absolute;
+      width: 0; height: 0;
+      border-style: solid;
+      opacity: .95;
+    }
+    .flapLeft{
+      left:0; bottom:0;
+      border-width: 0 0 calc(56%) calc(50%);
+      border-color: transparent transparent rgba(255,156,196,.35) transparent;
+    }
+    .flapRight{
+      right:0; bottom:0;
+      border-width: 0 calc(50%) calc(56%) 0;
+      border-color: transparent transparent rgba(255,90,143,.28) transparent;
+    }
+    .flapTop{
+      left:0; top:0;
+      border-width: calc(44%) calc(50%) 0 calc(50%);
+      border-color: rgba(255,90,143,.22) transparent transparent transparent;
+      transform-origin: 50% 0%;
+      transform: rotateX(0deg);
+      transition: transform .55s ease;
+    }
+
+    /* heart seal */
+    .seal{
+      position:absolute;
+      left: 50%;
+      top: 56%;
+      transform: translate(-50%, -50%);
+      width: 78px;
+      height: 78px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--red1), var(--red2));
+      box-shadow: 0 18px 40px rgba(216, 20, 76, .25);
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(255,255,255,.35);
+    }
+    .seal svg{
+      width: 34px; height: 34px;
+      fill: rgba(255,255,255,.92);
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
+    }
+
+    /* countdown */
+    .countRow{
+      margin-top: 12px;
+      display:flex;
+      justify-content:center;
+    }
+    .countCard{
+      width: min(520px, 90%);
+      background: rgba(255,255,255,.68);
+      border: 1px solid rgba(255,255,255,.75);
+      border-radius: 24px;
+      padding: 14px 16px;
+      text-align:center;
+    }
+    .countCard .label{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(216,20,76,.85);
+      margin-bottom: 6px;
+    }
+    .countCard .value{
+      font-family: "Fredoka", system-ui, sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      color: var(--ink);
+    }
+    .countCard .note{
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(106,53,82,.85);
+      font-weight: 800;
+    }
+
+    /* when unlocked, we animate flap */
+    .gate.unlocked .flapTop{
+      transform: rotateX(160deg);
+    }
+    .gate.unlocked .seal{
+      animation: sealPulse 1.25s ease-in-out infinite;
+    }
+    @keyframes sealPulse{
+      0%,100%{ transform: translate(-50%, -50%) scale(1); }
+      50%{ transform: translate(-50%, -50%) scale(1.06); }
+    }
+
+    /* App steps */
+    .step{
+      padding: 18px 18px 26px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .stepInner{
+      padding: 14px 16px 18px;
+    }
+
+    .title{
+      font-family: "Fredoka", system-ui, sans-serif;
+      color: var(--red2);
+      font-size: clamp(28px, 3.5vw, 42px);
+      margin: 0 0 6px;
+      line-height: 1.05;
+      text-align:center;
+    }
+    .subtitle{
+      margin: 0;
+      text-align:center;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    /* Photo grid */
+    .grid{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .mem{
+      margin:0;
+      border-radius: 22px;
+      overflow:hidden;
+      border: 1px solid rgba(255,47,110,.16);
+      background: rgba(255,255,255,.7);
+      box-shadow: 0 14px 30px rgba(58,22,48,.08);
+    }
+    .mem img{
+      width:100%;
+      height: 240px;
+      object-fit: cover;
+      display:block;
+    }
+    .mem figcaption{
+      padding: 10px 12px 12px;
+      font-size: 14px;
+      color: rgba(106,53,82,.92);
+      font-weight: 700;
+    }
+
+    /* Lists page */
+    .split{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 720px){
+      .split{ grid-template-columns: 1fr; }
+    }
+    .note{
+      border-radius: 26px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(255,47,110,.14);
+      padding: 16px;
+      box-shadow: 0 14px 30px rgba(58,22,48,.08);
+    }
+    .note h3{
+      margin: 0 0 10px;
+      font-family: "Fredoka", system-ui, sans-serif;
+      color: var(--red2);
+      font-size: 20px;
+    }
+    .note ul{
+      margin:0;
+      padding-left: 18px;
+      color: rgba(106,53,82,.95);
+      font-weight: 700;
+      line-height: 1.55;
+    }
+    .note li{ margin: 6px 0; }
+
+    /* Question page */
+    .questionBox{
+      margin-top: 16px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.74);
+      border: 1px solid rgba(255,47,110,.16);
+      padding: 18px;
+      box-shadow: 0 14px 30px rgba(58,22,48,.08);
+      position: relative;
+      overflow:hidden;
+    }
+    .qText{
+      font-family: "Fredoka", system-ui, sans-serif;
+      font-size: clamp(26px, 3.2vw, 40px);
+      color: var(--ink);
+      text-align:center;
+      margin: 6px 0 6px;
+      line-height: 1.12;
+    }
+    .qSub{
+      text-align:center;
+      margin: 0 0 14px;
+      color: rgba(106,53,82,.92);
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .buttons{
+      display:flex;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      position: relative;
+      min-height: 64px;
+    }
+
+    .btn{
+      border: none;
+      cursor: pointer;
+      padding: 14px 22px;
+      border-radius: 18px;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 18px 45px rgba(58,22,48,.10);
+      transition: transform .15s ease, filter .15s ease, left .20s ease, top .20s ease;
+      user-select:none;
+      position: relative;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+
+    .btnYes{
+      background: linear-gradient(135deg, var(--red1), var(--red2));
+      color: white;
+    }
+    .btnNo{
+      background: rgba(255, 90, 143, .14);
+      border: 1px solid rgba(255,47,110,.22);
+      color: rgba(58,22,48,.92);
+    }
+    .btn:hover{ filter: brightness(1.03); }
+
+    .funny{
+      margin-top: 10px;
+      text-align:center;
+      font-weight: 900;
+      color: rgba(216,20,76,.9);
+      min-height: 22px;
+    }
+
+    /* Yes result */
+    .finalMessage{
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,211,225,.65), rgba(255,255,255,.8));
+      border: 1px solid rgba(255,47,110,.16);
+      text-align:center;
+    }
+    .finalMessage h2{
+      margin: 0 0 6px;
+      font-family: "Fredoka", system-ui, sans-serif;
+      color: var(--red2);
+      font-size: 28px;
+    }
+    .finalMessage p{
+      margin: 0;
+      font-weight: 800;
+      color: rgba(58,22,48,.95);
+    }
+
+    /* Overlay “tap to continue” at bottom */
+    .continue{
+      text-align:center;
+      padding: 12px 14px 14px;
+      color: rgba(106,53,82,.88);
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+    .continue span{
+      display:inline-block;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.60);
+      border: 1px solid rgba(255,255,255,.85);
+    }
+
+    /* Confetti hearts */
+    .confetti{
+      position: fixed;
+      top: -20px;
+      width: 18px;
+      height: 18px;
+      pointer-events:none;
+      z-index: 9999;
+      animation: fall linear forwards;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,.18));
+    }
+    .confetti svg{
+      width:100%;
+      height:100%;
+      fill: rgba(255,47,110,.92);
+    }
+    @keyframes fall{
+      to{
+        transform: translateY(110vh) rotate(260deg);
+        opacity: 0.95;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <!-- background hearts -->
+  <svg class="bg-hearts" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <pattern id="bgheart" width="90" height="90" patternUnits="userSpaceOnUse">
+        <path d="M45 62 C30 50, 18 40, 18 28 C18 18, 26 10, 36 10 C42 10, 47 13, 45 18 C43 13, 48 10, 54 10 C64 10, 72 18, 72 28 C72 40, 60 50, 45 62 Z"
+              fill="rgba(255,255,255,0.55)"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="800" fill="url(#bgheart)"/>
+  </svg>
 
-  <!-- Waiting Screen -->
-  <main id="gate" class="gate hidden">
-    <div class="gate-card">
-
-      <div class="gate-icon">
-        <div class="heart"></div>
+  <div class="wrap">
+    <!-- GATE -->
+    <section id="gateCard" class="card hidden">
+      <div class="header">
+        <div class="badge"><span class="dot"></span><span id="gateStatus">SEALED</span></div>
+        <div id="gateTapHint" class="tapHint">Tap to open me</div>
       </div>
 
-      <h1>Open me tomorrow</h1>
+      <div id="gate" class="gate">
+        <div class="gateInner">
+          <div class="gateTitle">
+            <h1 id="gateTitle">Open me tomorrow</h1>
+            <p id="gateSub">This unlocks on Valentine’s Day</p>
+          </div>
 
-      <p class="subtitle">
-        This unlocks on Valentine’s Day
-      </p>
+          <div class="envelopeWrap">
+            <div id="envelope" class="envelope" aria-hidden="true">
+              <div class="pocket"></div>
+              <div class="flapLeft"></div>
+              <div class="flapRight"></div>
+              <div class="flapTop"></div>
 
-      <div class="countdown-box">
-        <div class="label">Countdown</div>
-        <div id="countdown" class="countdown">—</div>
+              <div class="seal">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 21s-7-4.5-9.5-8.8C.6 8.6 2.3 5.7 5.3 4.8c1.9-.6 3.8.1 4.9 1.4 1.1-1.3 3-2 4.9-1.4 3 .9 4.7 3.8 2.8 7.4C19 16.5 12 21 12 21z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="countRow">
+            <div class="countCard">
+              <div class="label">Unlocks in</div>
+              <div id="countdown" class="value">—</div>
+              <div class="note">Brisbane time</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="continue"><span>Tap anywhere</span></div>
+      </div>
+    </section>
+
+    <!-- APP -->
+    <section id="appCard" class="card hidden">
+      <div class="header">
+        <div class="badge"><span class="dot"></span><span id="stepLabel">STEP 1</span></div>
+        <div id="appTapHint" class="tapHint show">Tap to continue</div>
       </div>
 
-    </div>
-  </main>
+      <!-- STEP 1: PHOTOS -->
+      <div id="step1" class="step hidden">
+        <div class="stepInner">
+          <h2 class="title">A few favourite moments</h2>
+          <p class="subtitle">I keep these in my head all the time</p>
 
-  <!-- Main Page -->
-  <main id="app" class="app hidden">
-    <div class="card">
-      <h1>Hi Keira</h1>
-      <p>Will you be my Valentine?</p>
-
-      <div class="buttons">
-        <button id="yesBtn" class="btn yes">Yes</button>
-        <button id="noBtn" class="btn no">No</button>
+          <div class="grid" id="photoGrid"></div>
+        </div>
+        <div class="continue"><span>Tap to continue</span></div>
       </div>
 
-      <div id="response" class="response"></div>
-    </div>
-  </main>
+      <!-- STEP 2: LISTS -->
+      <div id="step2" class="step hidden">
+        <div class="stepInner">
+          <h2 class="title">Things I love about you</h2>
+          <p class="subtitle">And the tiny moments that make me smile</p>
+
+          <div class="split">
+            <div class="note">
+              <h3>Things I love about you</h3>
+              <ul id="loveList"></ul>
+            </div>
+            <div class="note">
+              <h3>Favourite tiny moments</h3>
+              <ul id="tinyList"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="continue"><span>Tap to continue</span></div>
+      </div>
+
+      <!-- STEP 3: QUESTION -->
+      <div id="step3" class="step hidden">
+        <div class="stepInner">
+          <h2 class="title">Important question</h2>
+          <p class="subtitle">Please answer carefully</p>
+
+          <div class="questionBox">
+            <div class="qText" id="qText">Will you marry me?</div>
+            <div class="qSub" id="qSub">No wrong answers… except one.</div>
+
+            <div class="buttons" id="btnArea">
+              <button id="yesBtn" class="btn btnYes" type="button">Yes</button>
+              <button id="noBtn" class="btn btnNo" type="button">No</button>
+            </div>
+
+            <div class="funny" id="funnyLine"></div>
+
+            <div id="final" class="finalMessage hidden">
+              <h2>I love you</h2>
+              <p>Best answer ever. Happy Valentine’s Day 💗 — Sam</p>
+            </div>
+          </div>
+        </div>
+        <div class="continue"><span>Tap anywhere (or press a button)</span></div>
+      </div>
+
+      <audio id="song" src="audio/song.mp3" preload="auto"></audio>
+    </section>
+  </div>
 
   <script>
+    // =========================================================
+    // CONFIG YOU EDIT
+    // =========================================================
+    // Brisbane time
     const UNLOCK_AT = new Date("2026-02-14T00:00:00+10:00");
+
+    // Photos: put files in /photos/ and update captions
+    const PHOTOS = [
+      { src: "photos/01.jpg", cap: "That day we couldn’t stop laughing" },
+      { src: "photos/02.jpg", cap: "My favourite person, my favourite place" },
+      { src: "photos/03.jpg", cap: "Proof that ‘us’ is my best idea" },
+      { src: "photos/04.jpg", cap: "Just you. And how lucky I am" },
+    ];
+
+    const LOVE_THINGS = [
+      "Your laugh (it fixes my whole day).",
+      "How you make home feel like home.",
+      "How kind you are — even when I’m in ‘debug mode’.",
+      "Your brain. Your heart. Your cute little habits.",
+      "How safe and happy I feel with you.",
+    ];
+
+    const TINY_MOMENTS = [
+      "The look we share when something is funny.",
+      "When you tell a story and get animated.",
+      "When we laugh at something dumb for ages.",
+      "When you steal the blanket and pretend you didn’t.",
+      "When we’re doing nothing… but it’s perfect.",
+    ];
+
+    // Funny lines for the "No" button
+    const NO_LINES = [
+      "Interesting choice. Let’s try that again.",
+      "Are you sure? Like… legally sure?",
+      "I think your finger slipped. It happens.",
+      "That button seems a bit suspicious, hey.",
+      "Your device might be bugged. Tap ‘Yes’ to reboot.",
+      "This is getting awkward for the ‘No’ button.",
+      "Okay the ‘No’ button is going on a diet now.",
+      "Final offer: press Yes and I’ll cook dinner.",
+      "I have upgraded the Yes button for improved accuracy.",
+      "This is a safe space to choose Yes.",
+    ];
+
+    // Hidden bypass key for testing (not shown)
     const BYPASS_KEY = "/";
 
-    const gateEl = document.getElementById("gate");
-    const appEl = document.getElementById("app");
+    // =========================================================
+    // ELEMENTS
+    // =========================================================
+    const gateCard = document.getElementById("gateCard");
+    const gate = document.getElementById("gate");
+    const envelope = document.getElementById("envelope");
     const countdownEl = document.getElementById("countdown");
+    const gateStatus = document.getElementById("gateStatus");
+    const gateTapHint = document.getElementById("gateTapHint");
+    const gateTitle = document.getElementById("gateTitle");
+    const gateSub = document.getElementById("gateSub");
 
+    const appCard = document.getElementById("appCard");
+    const appTapHint = document.getElementById("appTapHint");
+    const stepLabel = document.getElementById("stepLabel");
+
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const step3 = document.getElementById("step3");
+
+    const photoGrid = document.getElementById("photoGrid");
+    const loveList = document.getElementById("loveList");
+    const tinyList = document.getElementById("tinyList");
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const btnArea = document.getElementById("btnArea");
+    const funnyLine = document.getElementById("funnyLine");
+    const finalBox = document.getElementById("final");
+    const song = document.getElementById("song");
+
+    // =========================================================
+    // RENDER CONTENT
+    // =========================================================
+    function renderPhotos(){
+      photoGrid.innerHTML = PHOTOS.map(p => `
+        <figure class="mem">
+          <img src="${p.src}" alt="Memory" loading="lazy" />
+          <figcaption>${escapeHtml(p.cap)}</figcaption>
+        </figure>
+      `).join("");
+    }
+
+    function renderLists(){
+      loveList.innerHTML = LOVE_THINGS.map(x => `<li>${escapeHtml(x)}</li>`).join("");
+      tinyList.innerHTML = TINY_MOMENTS.map(x => `<li>${escapeHtml(x)}</li>`).join("");
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[c]));
+    }
+
+    renderPhotos();
+    renderLists();
+
+    // =========================================================
+    // TIME GATE
+    // =========================================================
     function pad(n){ return String(n).padStart(2,"0"); }
 
-    function showGate(){
-      gateEl.classList.remove("hidden");
-      appEl.classList.add("hidden");
-      updateCountdown();
-    }
-
-    function showApp(){
-      gateEl.classList.add("hidden");
-      appEl.classList.remove("hidden");
-    }
+    let unlocked = false;
 
     function updateCountdown(){
       const t = UNLOCK_AT - new Date();
-      if(t <= 0){ showApp(); return; }
+      if (t <= 0) {
+        unlocked = true;
+        countdownEl.textContent = "Ready now";
+        gateCard.classList.remove("hidden");
+        gate.classList.add("unlocked");
+        gateStatus.textContent = "UNLOCKED";
+        gateTapHint.classList.add("show");
+        gateTitle.textContent = "Open me";
+        gateSub.textContent = "Tap to open your letter";
+        return;
+      }
 
       const s = Math.floor(t/1000);
       const d = Math.floor(s/86400);
@@ -87,50 +765,167 @@
       setTimeout(updateCountdown, 250);
     }
 
+    function showGate(){
+      gateCard.classList.remove("hidden");
+      appCard.classList.add("hidden");
+      updateCountdown();
+    }
+
+    function showApp(){
+      gateCard.classList.add("hidden");
+      appCard.classList.remove("hidden");
+      goToStep(1);
+    }
+
+    // Hidden bypass for you testing
     function enableBypass(){
-      showApp();
-      try { sessionStorage.setItem("val_bypass","1"); } catch(_) {}
+      unlocked = true;
+      try { sessionStorage.setItem("val_bypass","1"); } catch(_){}
+      // Update gate UI immediately
+      countdownEl.textContent = "Ready now";
+      gate.classList.add("unlocked");
+      gateStatus.textContent = "UNLOCKED";
+      gateTapHint.classList.add("show");
+      gateTitle.textContent = "Open me";
+      gateSub.textContent = "Tap to open your letter";
     }
 
     document.addEventListener("keydown", (e)=>{
-      if(e.key === BYPASS_KEY) enableBypass();
+      if (e.key === BYPASS_KEY) enableBypass();
     });
 
     const bypassed = (() => {
-      try { return sessionStorage.getItem("val_bypass") === "1"; }
-      catch(_) { return false; }
+      try { return sessionStorage.getItem("val_bypass") === "1"; } catch(_) { return false; }
     })();
 
-    if(bypassed || new Date() >= UNLOCK_AT) showApp();
-    else showGate();
+    // Start
+    showGate();
+    if (bypassed) enableBypass();
 
-    // Buttons
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const response = document.getElementById("response");
+    // Gate tap behavior:
+    // - if locked: do nothing (just cute)
+    // - if unlocked: open app
+    gate.addEventListener("click", () => {
+      if (!unlocked) return;
+      // small “open” animation moment
+      envelope.style.transform = "translateY(-1px)";
+      setTimeout(() => {
+        envelope.style.transform = "";
+        showApp();
+      }, 140);
+    });
 
-    const prompts = [
-      "Are you sure?",
-      "Try that again 🙂",
-      "That seems unlikely",
-      "One more time",
-      "Will you be my Valentine?"
-    ];
+    // =========================================================
+    // STEP FLOW (tap anywhere in card to continue)
+    // =========================================================
+    let currentStep = 1;
 
+    function goToStep(n){
+      currentStep = n;
+      step1.classList.add("hidden");
+      step2.classList.add("hidden");
+      step3.classList.add("hidden");
+
+      if (n === 1){
+        stepLabel.textContent = "STEP 1";
+        step1.classList.remove("hidden");
+      } else if (n === 2){
+        stepLabel.textContent = "STEP 2";
+        step2.classList.remove("hidden");
+      } else {
+        stepLabel.textContent = "STEP 3";
+        step3.classList.remove("hidden");
+      }
+    }
+
+    // Tap anywhere in the app card advances (except when clicking buttons)
+    appCard.addEventListener("click", (e) => {
+      const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : "";
+      if (tag === "button") return; // don't advance when pressing Yes/No
+      if (currentStep < 3) goToStep(currentStep + 1);
+    });
+
+    // =========================================================
+    // MARRY ME BUTTON LOGIC
+    // =========================================================
     let noCount = 0;
 
-    noBtn.addEventListener("click", ()=>{
+    function setButtonScales(){
+      const yesScale = Math.min(1 + noCount * 0.16, 2.8);
+      const noScale  = Math.max(1 - noCount * 0.10, 0.45);
+      yesBtn.style.transform = `scale(${yesScale})`;
+      noBtn.style.transform  = `scale(${noScale})`;
+    }
+
+    function moveNoButton(){
+      // Move within the button area bounds
+      const area = btnArea.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
+
+      const maxX = Math.max(0, area.width - btn.width);
+      const maxY = Math.max(0, area.height - btn.height);
+
+      const x = Math.floor(Math.random() * (maxX + 1));
+      const y = Math.floor(Math.random() * (maxY + 1));
+
+      // Make it absolute within the area after a few attempts
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+    }
+
+    noBtn.addEventListener("click", () => {
       noCount++;
-      response.textContent = prompts[Math.min(noCount-1, prompts.length-1)];
+      funnyLine.textContent = NO_LINES[Math.min(noCount - 1, NO_LINES.length - 1)];
+      setButtonScales();
 
-      yesBtn.style.transform = `scale(${1 + noCount * 0.15})`;
-      noBtn.style.transform = `scale(${1 - noCount * 0.07})`;
+      // After a couple of "No"s, it gets evasive
+      if (noCount >= 2) moveNoButton();
+
+      // Tiny shake
+      noBtn.animate(
+        [
+          { transform: noBtn.style.transform + " translateX(0px)" },
+          { transform: noBtn.style.transform + " translateX(6px)" },
+          { transform: noBtn.style.transform + " translateX(-6px)" },
+          { transform: noBtn.style.transform + " translateX(0px)" },
+        ],
+        { duration: 220, iterations: 1 }
+      );
     });
 
-    yesBtn.addEventListener("click", ()=>{
-      response.textContent = "Best answer ever ❤️";
+    yesBtn.addEventListener("click", async () => {
+      funnyLine.textContent = "";
+      finalBox.classList.remove("hidden");
+      burstHearts();
+
+      // Play song (works because this is a user click)
+      try { await song.play(); } catch (_) {}
+
+      // Make "No" stop being annoying
+      noBtn.disabled = true;
+      noBtn.style.opacity = "0.35";
+      noBtn.style.cursor = "default";
     });
+
+    // =========================================================
+    // HEART CONFETTI
+    // =========================================================
+    function burstHearts(){
+      for (let i = 0; i < 34; i++){
+        const s = document.createElement("span");
+        s.className = "confetti";
+        s.style.left = (Math.random() * 100) + "vw";
+        s.style.animationDuration = (1.4 + Math.random() * 1.9) + "s";
+        s.style.transform = `translateY(0) rotate(${Math.floor(Math.random()*180)}deg)`;
+        s.innerHTML = `
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21s-7-4.5-9.5-8.8C.6 8.6 2.3 5.7 5.3 4.8c1.9-.6 3.8.1 4.9 1.4 1.1-1.3 3-2 4.9-1.4 3 .9 4.7 3.8 2.8 7.4C19 16.5 12 21 12 21z"/>
+          </svg>`;
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 3800);
+      }
+    }
   </script>
-
 </body>
 </html>
